@@ -132,39 +132,9 @@ class Transformer(nn.Module):
 
         encoding_gate = torch.cat((encoding_input * gate[:, 0:1], encoding_channel * gate[:, 1:2]), dim=1)
 
-        encoding_gate = torch.cat([encoding_channel, encoding_input], dim=-1)
 
-        # encoding_att = torch.cat([encoding_channel, encoding_input], dim=-1)
-        # # encoding = self._layerNorm(encoding)
-        # # d_model -> output
-        # # print(encoding.shape)
-        # # encoding = self._attention_linear(encoding)
         
-        # encoding_att = encoding_att.unsqueeze(-1)
         
-        # # self Attention
-        # Q = torch.cat(self._W_q(encoding_att).chunk(self._h, dim=-1), dim=0)
-        # K = torch.cat(self._W_k(encoding_att).chunk(self._h, dim=-1), dim=0)
-        # V = torch.cat(self._W_v(encoding_att).chunk(self._h, dim=-1), dim=0)
-
-        # # Scaled Dot Product
-        # self._scores = torch.matmul(Q, K.transpose(-1, -2)) / math.sqrt(self._q)
-
-        # # Apply softmax
-        # self._scores = F.softmax(self._scores, dim=-1)  # shape [batchsize * head_num, input, input]
-
-        # # scores * values  结果维度(batchsize*head_nums, input, v)
-        # attention = torch.matmul(self._scores, V)
-
-        # # Concatenat the heads  结果维度(batchsize, input, v*head_nums)
-        # attention_heads = torch.cat(attention.chunk(self._h, dim=0), dim=-1)
-
-        # # Apply linear transformation W^O
-        # self_attention = self._W_o(attention_heads)  # shape [batchsize, input, d_model]
-      
-        # output_att = self_attention.squeeze()
-        # output = self._layerNorm(encoding_gate+output_att)
-        # print(output.shape)
         encoding_gate = self._layerNorm(encoding_gate)
         # encoding_gate = self._dropout(encoding_gate)
         output = self._linear(encoding_gate)
